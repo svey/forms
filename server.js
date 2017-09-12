@@ -5,20 +5,6 @@ const routes = require('./routes');
 
 const app = express();
 
-const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host : 'localhost',
-    user : '',
-    password : '',
-    database : 'form'
-  }
-});
-
-const bookshelf = require('bookshelf')(knex);
-
-app.set('bookshelf', bookshelf);
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('static'));

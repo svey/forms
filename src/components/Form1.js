@@ -29,8 +29,6 @@ class Form1 extends React.Component{
     const url = 'http://localhost:4000/api/user';
     const body = JSON.stringify({ email, password, username, id: username })
     
-    console.log(body)
-    
     return fetch(url, {
       method: 'POST',
       headers: {

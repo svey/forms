@@ -31,13 +31,10 @@ const User = bookshelf.Model.extend({
     hasTimestamps: true,
 });
 
-
-
 const Users = bookshelf.Collection.extend({  
     model: User
 });
 
-// middle where to handle if the service can’t provide a reasonable estimation for the given inputs
 router.use('/', function(err, req, res, next) {
   if(err) {
     res.status(404).send('Oh no, 404! Something broke!')
@@ -45,7 +42,6 @@ router.use('/', function(err, req, res, next) {
   next();
 });
 
-// routes
 router.route('/user').post(function(req, res) {
   User.forge(req.body).save(null, { method: 'insert' }).then(function(user) {  
     res.send('User saved: ' + user.get('username'));

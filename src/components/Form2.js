@@ -36,8 +36,6 @@ class Form2 extends React.Component{
     const url = 'http://localhost:4000/api/user/update';
     const body = JSON.stringify({ firstName, lastName, phone, username })
     
-    console.log(body)
-    
     return fetch(url, {
       method: 'POST',
       headers: {
