@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { Button } from 'react-toolbox/lib/button';
@@ -8,37 +8,38 @@ import Input from 'react-toolbox/lib/input';
 import { populateForm } from '../actions';
 
 class Form3 extends React.Component{
+  static propTypes = {
+    history: PropTypes.object.isRequired
+  }
+
   constructor(props){
     super(props);
   }
 
-  submitForm() {
-    const {
-      email,
-      password,
-      username,
-      firstName,
-      lastName,
-      phone,
-      street,
-      city,
-      state,
-      zip
-    } = this.props;
-    const url = 'http://localhost:4000/api/user';
-    const body = JSON.stringify({
-      email,
-      password,
-      username,
-      firstName,
-      lastName,
-      phone,
-      street,
-      city,
-      state,
-      zip
+  componentWillMount() {
+    this.props.populateForm('FORM', {
+      prop: 'save',
+      value: false
     })
+  }
+
+  componentDidUpdate() {
+    const { street, city, state, zip, save } = this.props;
+    if (street && city && state && zip && !save) {
+      this.props.populateForm('FORM', {
+        prop: 'save',
+        value: true
+      })
+    }
+  }
+
+  updateUser() {
+    const { street, city, state, zip, username } = this.props;
+    const url = 'http://localhost:4000/api/user/update';
+    const body = JSON.stringify({ street, city, state, zip, username })
+    
     console.log(body)
+    
     return fetch(url, {
       method: 'POST',
       headers: {
@@ -47,8 +48,11 @@ class Form3 extends React.Component{
       },
       body
     })
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+    .then(res => {
+      console.log(res)
+      this.props.history.push('/')
+    })
+    .catch(err => console.log(err));
   }
 
   render(){
@@ -121,7 +125,7 @@ class Form3 extends React.Component{
       />
       <CardMedia
         aspectRatio='wide'
-        image="https://cdn.pixabay.com/photo/2016/08/18/00/08/belgium-1601920_960_720.jpg"
+        image="https://images.pexels.com/photos/358319/pexels-photo-358319.jpeg"
       />
       <section>
         <Input
@@ -170,12 +174,11 @@ class Form3 extends React.Component{
         />
       </section>
       <CardActions>
-        <Link to="/form3">
           <Button
-            label="Submit"
-            onClick={this.submitForm.bind(this)}
+            label="Save"
+            onClick={this.updateUser.bind(this)}
+            disabled={!this.props.save}
           />
-        </Link>
       </CardActions>
     </Card>
     )
@@ -183,19 +186,8 @@ class Form3 extends React.Component{
 }
 
 const mapStateToProps = ({ form }) => {
-  const { email, password, username, firstName, lastName, phone, street, city, state, zip } = form;
-  return {
-    email,
-    password,
-    username,
-    firstName,
-    lastName,
-    phone,
-    street,
-    city,
-    state,
-    zip
-  }
+  const { street, city, state, zip, username, save } = form;
+  return { street, city, state, zip, username, save }
 };
 
 export default connect(mapStateToProps, { populateForm })(Form3);

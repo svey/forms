@@ -1,17 +1,64 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Button } from 'react-toolbox/lib/button';
 import { Card, CardActions, CardMedia, CardTitle } from 'react-toolbox/lib/card';
 import Input from 'react-toolbox/lib/input';
 import { populateForm } from '../actions';
 
 class Form1 extends React.Component{
+  static propTypes = {
+    history: PropTypes.object.isRequired
+  }
+
   constructor(props){
     super(props);
   }
 
+  componentDidUpdate() {
+    const { email, password, username, save } = this.props;
+    if (email && password && username && !save) {
+      this.props.populateForm('FORM', {
+        prop: 'save',
+        value: true
+      })
+    } 
+  }
+
+  createUser() {
+    const { email, password, username } = this.props;
+    const url = 'http://localhost:4000/api/user';
+    const body = JSON.stringify({ email, password, username, id: username })
+    
+    console.log(body)
+    
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body
+    })
+    .then(res => {
+      console.log(res)
+      this.props.history.push('/form2')
+    })
+    .catch(err => console.log(err));
+  }
+
+  formComplete() {
+    const { email, password, username } = this.props;
+    if (email, password, username) {
+      this.props.populateForm('FORM', {
+        prop: 'save',
+        value: true
+      })
+    } 
+  }
+
   render(){
+
     return (
     <Card style={{ width: '50%'}}>
       <CardTitle
@@ -19,7 +66,7 @@ class Form1 extends React.Component{
       />
       <CardMedia
         aspectRatio='wide'
-        image="https://cdn.pixabay.com/photo/2016/08/18/00/08/belgium-1601920_960_720.jpg"
+        image="https://images.pexels.com/photos/163726/belgium-antwerp-shipping-container-163726.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb"
       />
       <section>
         <Input
@@ -58,9 +105,13 @@ class Form1 extends React.Component{
         />
       </section>
       <CardActions>
-        <Link to="/form2">
-          <Button label="Next" />
-        </Link>
+
+          <Button
+            label="Save"
+            onClick={this.createUser.bind(this)}
+            disabled={!this.props.save}
+          />
+ 
       </CardActions>
     </Card>
     )
@@ -68,11 +119,12 @@ class Form1 extends React.Component{
 }
 
 const mapStateToProps = ({ form }) => {
-  const { email, password, username } = form
+  const { email, password, username, save } = form;
   return {
     email,
     password,
-    username
+    username,
+    save
   }
 };
 

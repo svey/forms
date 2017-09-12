@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { Button } from 'react-toolbox/lib/button';
@@ -7,8 +7,51 @@ import Input from 'react-toolbox/lib/input';
 import { populateForm } from '../actions';
 
 class Form2 extends React.Component{
+  static propTypes = {
+    history: PropTypes.object.isRequired
+  }
+
   constructor(props){
     super(props);
+  }
+
+  componentWillMount() {
+    this.props.populateForm('FORM', {
+      prop: 'save',
+      value: false
+    })
+  }
+
+  componentDidUpdate() {
+    const { firstName, lastName, phone, save } = this.props;
+    if (firstName && lastName && phone && !save) {
+      this.props.populateForm('FORM', {
+        prop: 'save',
+        value: true
+      })
+    }
+  }
+
+  updateUser() {
+    const { firstName, lastName, phone, username } = this.props;
+    const url = 'http://localhost:4000/api/user/update';
+    const body = JSON.stringify({ firstName, lastName, phone, username })
+    
+    console.log(body)
+    
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body
+    })
+      .then(res => {
+        console.log(res)
+        this.props.history.push('/form3')
+      })
+      .catch(err => console.log(err));
   }
 
   render(){
@@ -19,7 +62,7 @@ class Form2 extends React.Component{
       />
       <CardMedia
         aspectRatio='wide'
-        image="https://cdn.pixabay.com/photo/2016/08/18/00/08/belgium-1601920_960_720.jpg"
+        image="https://images.pexels.com/photos/163726/belgium-antwerp-shipping-container-163726.jpeg"
       />
       <section>
         <Input
@@ -58,9 +101,11 @@ class Form2 extends React.Component{
         />
       </section>
       <CardActions>
-        <Link to="/form3">
-          <Button label="Next" />
-        </Link>
+          <Button
+            label="Save"
+            onClick={this.updateUser.bind(this)}
+            disabled={!this.props.save}
+          />
       </CardActions>
     </Card>
     )
@@ -68,11 +113,13 @@ class Form2 extends React.Component{
 }
 
 const mapStateToProps = ({ form }) => {
-  const { firstName, lastName, phone } = form
+  const { firstName, lastName, phone, username, save } = form
   return {
     firstName,
     lastName,
-    phone
+    phone,
+    username,
+    save
   }
 };
 

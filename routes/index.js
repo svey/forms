@@ -9,13 +9,13 @@ const knex = require('knex')({
   }
 });
 
-knex.schema.createTable('users', function(table) {  
-    table.increments();
+knex.schema.createTable('users', function(table) {
+    table.string('id').unique(); 
+    table.string('username').unique();
+    table.string('email').unique();
     table.string('password');
-    table.string('username');
     table.string('firstName');
     table.string('lastName');
-    table.string('email');
     table.string('phone');
     table.string('city');
     table.string('street');
@@ -47,9 +47,16 @@ router.use('/', function(err, req, res, next) {
 
 // routes
 router.route('/user').post(function(req, res) {
-    User.forge(req.body).save(null, {method: 'insert'}).then(function(user) {  
-      res.send('User saved: ' + user.get('username'));
-    });
+  User.forge(req.body).save(null, { method: 'insert' }).then(function(user) {  
+    res.send('User saved: ' + user.get('username'));
   });
+});
+
+router.route('/user/update').post(function(req, res) {
+  const { username } = req.body;
+  User.forge({ id: username }).save(req.body, { method: 'update', patch: true }).then(function(user) {  
+    res.send('User saved: ' + user.get('username'));
+  });
+});
 
 module.exports = router;
