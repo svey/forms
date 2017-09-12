@@ -2,18 +2,11 @@ const router = require('express').Router();
 const knex = require('knex')({
   client: 'pg',
   connection: {
-    host : 'localhost',
-    user : 'root',
+    host : '',
+    user : '',
     password : 'password',
     database : 'form'
   }
-});
-
-const bookshelf = require('bookshelf')(knex);
-
-const User = bookshelf.Model.extend({  
-    tableName: 'users',
-    hasTimestamps: true,
 });
 
 knex.schema.createTable('users', function(table) {  
@@ -22,13 +15,22 @@ knex.schema.createTable('users', function(table) {
     table.string('username');
     table.string('firstName');
     table.string('lastName');
+    table.string('email');
     table.string('phone');
     table.string('city');
     table.string('street');
     table.string('state');
     table.string('zip');
     table.timestamps();
+}).then();
+
+const bookshelf = require('bookshelf')(knex);
+
+const User = bookshelf.Model.extend({  
+    tableName: 'users',
+    hasTimestamps: true,
 });
+
 
 
 const Users = bookshelf.Collection.extend({  
@@ -45,22 +47,7 @@ router.use('/', function(err, req, res, next) {
 
 // routes
 router.route('/user').post(function(req, res) {
-    console.log(req.body);
-    // request parameters
-    const {
-      email,
-      password,
-      username,
-      firstName,
-      lastName,
-      phone,
-      city,
-      street,
-      state,
-      zip
-    } = req.body;
-    
-    User.forge(req.body).save().then(function(user) {  
+    User.forge(req.body).save(null, {method: 'insert'}).then(function(user) {  
       res.send('User saved: ' + user.get('username'));
     });
   });

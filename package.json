@@ -23,6 +23,7 @@
     "express": "^4.15.4",
     "knex": "^0.13.0",
     "node-sass": "^4.5.3",
+    "pg": "^7.3.0",
     "postcss": "^6.0.10",
     "postcss-cssnext": "^3.0.2",
     "postcss-each": "^0.10.0",

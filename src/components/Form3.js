@@ -26,25 +26,26 @@ class Form3 extends React.Component{
       zip
     } = this.props;
     const url = 'http://localhost:4000/api/user';
-
+    const body = JSON.stringify({
+      email,
+      password,
+      username,
+      firstName,
+      lastName,
+      phone,
+      street,
+      city,
+      state,
+      zip
+    })
+    console.log(body)
     return fetch(url, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        email,
-        password,
-        username,
-        firstName,
-        lastName,
-        phone,
-        street,
-        city,
-        state,
-        zip
-      })
+      body
     })
       .then(res => console.log(res))
       .catch(err => console.log(err));
