@@ -3,9 +3,7 @@ import { render } from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { browserHistory } from 'react-router';
 import rootReducer from './reducers';
-import routes from './routes';
 import LandingPage from './components/LandingPage'
 import Form1 from './components/Form1'
 import Form2 from './components/Form2'

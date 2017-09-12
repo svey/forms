@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
 import { Button } from 'react-toolbox/lib/button';
 import { Card, CardActions, CardMedia, CardTitle } from 'react-toolbox/lib/card';
 import Input from 'react-toolbox/lib/input';
@@ -66,7 +65,7 @@ class Form1 extends React.Component{
       />
       <CardMedia
         aspectRatio='wide'
-        image="https://images.pexels.com/photos/163726/belgium-antwerp-shipping-container-163726.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb"
+        image="https://images.pexels.com/photos/163726/belgium-antwerp-shipping-container-163726.jpeg"
       />
       <section>
         <Input

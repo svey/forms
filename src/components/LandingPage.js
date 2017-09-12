@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { Button } from 'react-toolbox/lib/button';
 import { Card, CardActions, CardMedia, CardTitle } from 'react-toolbox/lib/card';
-import Dropdown from 'react-toolbox/lib/dropdown';
-import Input from 'react-toolbox/lib/input';
 import { populateForm } from '../actions';
 
 class LandingPage extends React.Component{
@@ -27,9 +25,9 @@ class LandingPage extends React.Component{
           <Button
             label="Continue"
             onClick={this.props.populateForm.bind(this, 'CLEAR', {
-            prop: '',
-            value: ''
-          })}
+              prop: '',
+              value: ''
+            })}
           />
         </Link>
       </CardActions>
