@@ -1,13 +1,6 @@
 const router = require('express').Router();
-const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host : '',
-    user : '',
-    password : 'password',
-    database : 'form'
-  }
-});
+const knexConfig = require('../knexfile')
+const knex = require('knex')(knexConfig);
 
 knex.schema.createTable('users', function(table) {
     table.string('id').unique(); 
